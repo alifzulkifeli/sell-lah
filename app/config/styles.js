@@ -10,5 +10,6 @@ export default {
 		}),
 		fontSize: 18,
 		color: colors.dark,
+		width: "100%",
 	},
 };

@@ -3,8 +3,12 @@ import { Text, Platform, StyleSheet } from "react-native";
 
 import defaulStyles from "../config/styles";
 
-const AppText = ({ children, style }) => {
-	return <Text style={[styles.text, style]}>{children}</Text>;
+const AppText = ({ children, style, ...otherProps }) => {
+	return (
+		<Text style={[styles.text, style]} {...otherProps}>
+			{children}
+		</Text>
+	);
 };
 
 const styles = StyleSheet.create({

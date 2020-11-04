@@ -1,41 +1,39 @@
-import React, { useState } from "react";
-import { View, ImageBackground, Text, StyleSheet } from "react-native";
-import WelcomeScreen from "./app/screens/WelcomeScreen";
-import ViewImageScreen from "./app/screens/ViewImageScreen";
+import React, { useState, useEffect } from "react";
 
-import colors from "./app/config/colors";
-import AppText from "./app/components/AppText";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import AppButton from "./app/components/AppButton";
-import Card from "./app/components/Card";
-import ListingDetailsScreen from "./app/screens/ListingDetailsScreen";
-import MessagesScreen from "./app/screens/MessagesScreen";
-import Icon from "./app/components/Icon";
-import Screen from "./app/components/Screen";
-import ListItem from "./app/components/ListItem";
-import AccountScreen from "./app/screens/AccountScreen";
-import ListingScreen from "./app/screens/ListingScreen";
-import { TextInput, Switch } from "react-native-gesture-handler";
-import AppTextInput from "./app/components/AppTextInput";
-import AppPicker from "./app/components/AppPicker";
-import LoginScreen from "./app/screens/LoginScreen";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import AuthNavigator from "./app/navigation/AuthNavigator";
+import navigationTheme from "./app/navigation/navigationTheme";
+import AppNavigator from "./app/navigation/AppNavigator";
+import OfflineNotice from "./app/components/OfflineNotice";
+import AuthContext from "./app/auth/context";
+import authStorage from "./app/auth/storage";
+import JwtDecode from "jwt-decode";
+import { AppLoading } from "expo";
+import { navigationRef } from "./app/navigation/rootNavigation";
+import logger from "./app/utility/logger";
 
+logger.start();
+//TODO replace all clg with logger.log()
 export default function App() {
-	const categories = [
-		{ label: "watch", value: 1 },
-		{ label: "cloth", value: 2 },
-		{ label: "camera", value: 3 },
-	];
+	const [user, setUser] = useState();
+	const [isReady, setIsReady] = useState(false);
 
-	const [category, setCategory] = useState();
+	const restoreUser = async () => {
+		const user = await authStorage.getUser();
+		if (user) setUser(user);
+	};
+	if (!isReady)
+		return (
+			<AppLoading startAsync={restoreUser} onFinish={() => setIsReady(true)} />
+		);
 
 	return (
-		//<WelcomeScreen />
-		//<ListingDetailsScreen />
-		//<ViewImageScreen />
-		//<MessagesScreen />
-		//<AccountScreen />
-		//<ListingScreen />
-		<LoginScreen />
+		<AuthContext.Provider value={{ user, setUser }}>
+			<OfflineNotice />
+			<NavigationContainer ref={navigationRef} theme={navigationTheme}>
+				{user ? <AppNavigator /> : <AuthNavigator />}
+			</NavigationContainer>
+		</AuthContext.Provider>
 	);
 }

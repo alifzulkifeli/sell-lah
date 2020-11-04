@@ -1,25 +1,39 @@
 {
-	"expo": {
-		"name": "alanis",
-		"slug": "alanis",
-		"version": "1.0.0",
-		"orientation": "default",
-		"icon": "./app/assets/icon.png",
-		"splash": {
-			//"image": "./appapp/assets/splash.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
-		},
-		"updates": {
-			"fallbackToCacheTimeout": 0
-		},
-		"assetBundlePatterns": ["**/*"],
-		"ios": {
-			"supportsTablet": true
-		},
-		"web": {
-			"favicon": "./assets/favicon.png"
-		},
-		"description": ""
-	}
+  "expo": {
+    "name": "jombeli",
+    "slug": "jombeli",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./app/assets/icon.png",
+    "splash": {
+      "image": "./app/assets/logo.png",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "description": "",
+    "extra": {
+      "bugsnag": {
+        "apiKey": "29b32ac03b7a463a4b34d0714f8306d7"
+      }
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "@bugsnag/expo/hooks/post-publish.js",
+          "config": {}
+        }
+      ]
+    }
+  }
 }

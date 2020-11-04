@@ -1,10 +1,12 @@
 import React from "react";
 import Screen from "../components/Screen";
-import ListItem from "../components/ListItem";
+import ListItem from "../components/list/ListItem";
 import { StyleSheet, View, FlatList } from "react-native";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
-import ListItemSeperator from "../components/ListItemSeperator";
+import ListItemSeperator from "../components/list/ListItemSeperator";
+
+import useAuth from "../auth/useAuth";
 
 const menuItems = [
 	{
@@ -14,10 +16,13 @@ const menuItems = [
 	{
 		title: "my messages",
 		icon: { name: "email", backgroundColor: colors.secondary },
+		targetScreen: "Messages",
 	},
 ];
 
-const AccountScreen = () => {
+const AccountScreen = ({ navigation }) => {
+	const { user, logOut } = useAuth();
+
 	const renderItem = ({ item }) => (
 		<ListItem
 			title={item.title}
@@ -27,6 +32,7 @@ const AccountScreen = () => {
 					backgroundColor={item.icon.backgroundColor}
 				/>
 			}
+			onPress={() => navigation.navigate(item.targetScreen)}
 		/>
 	);
 
@@ -34,15 +40,15 @@ const AccountScreen = () => {
 		<Screen style={styles.screen}>
 			<View style={styles.container}>
 				<ListItem
-					title="Aliff Aiman"
-					subTitle="alifzulkifeli@gmail.com"
+					title={user.name}
+					subTitle={user.email}
 					image={require("../assets/bg.jpg")}
 				/>
 			</View>
 			<View style={styles.container}>
 				<FlatList
 					data={menuItems}
-					keyExtractor={(menuItem) => menuItem.title}
+					keyExtractor={(menuItem) => menuItem.title.toString()}
 					renderItem={renderItem}
 					ItemSeparatorComponent={ListItemSeperator}
 				/>
@@ -50,6 +56,7 @@ const AccountScreen = () => {
 			<ListItem
 				title="Log Out"
 				IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
+				onPress={() => logOut()}
 			/>
 		</Screen>
 	);

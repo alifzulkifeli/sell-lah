@@ -1,7 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Modal, Button, FlatList } from "react-native";
+import {
+	View,
+	StyleSheet,
+	Modal,
+	Button,
+	FlatList,
+	TouchableWithoutFeedback,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { TextInput, TouchableWithoutFeedback } from "react-native";
 
 import defaulStyles from "../config/styles";
 import AppText from "./AppText";
@@ -11,15 +17,18 @@ import PickerItem from "./PickerItem";
 const AppPicker = ({
 	icon,
 	items,
+	numberOfColumns = 1,
 	placeholder,
+	PickerItemComponent = PickerItem,
 	selectedItem,
 	onSelectItem,
+	width = "100%",
 }) => {
 	const [modalVisible, setModalVisible] = useState(false);
 	return (
 		<>
 			<TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
-				<View style={styles.container}>
+				<View style={[styles.container, { width }]}>
 					{icon && (
 						<MaterialCommunityIcons
 							name={icon}
@@ -28,9 +37,12 @@ const AppPicker = ({
 							style={styles.icon}
 						/>
 					)}
-					<AppText style={styles.text}>
-						{selectedItem ? selectedItem : placeholder}
-					</AppText>
+					{selectedItem ? (
+						<AppText style={styles.text}>{selectedItem.label}</AppText>
+					) : (
+						<AppText style={styles.placeholder}>{placeholder}</AppText>
+					)}
+
 					<MaterialCommunityIcons
 						name="chevron-down"
 						size={20}
@@ -44,12 +56,14 @@ const AppPicker = ({
 					<FlatList
 						data={items}
 						keyExtractor={(item) => item.value.toString()}
+						numColumns={numberOfColumns}
 						renderItem={({ item }) => (
-							<PickerItem
+							<PickerItemComponent
+								item={item}
 								label={item.label}
 								onPress={() => {
 									setModalVisible(false);
-									onSelectItem(item.label);
+									onSelectItem(item);
 								}}
 							/>
 						)}
@@ -65,7 +79,6 @@ const styles = StyleSheet.create({
 		backgroundColor: defaulStyles.colors.gray,
 		borderRadius: 25,
 		flexDirection: "row",
-		width: "100%",
 		padding: 15,
 		marginVertical: 10,
 	},
@@ -75,6 +88,7 @@ const styles = StyleSheet.create({
 		marginTop: 2,
 	},
 	text: { flex: 1 },
+	placeholder: { color: defaulStyles.colors.medium, flex: 1 },
 });
 
 export default AppPicker;

@@ -1,25 +1,41 @@
 import React from "react";
-import { View, Image, StyleSheet } from "react-native";
+import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import AppText from "../components/AppText";
 import colors from "../config/colors";
-import ListItem from "../components/ListItem.js";
+import ListItem from "../components/list/ListItem.js";
+import { Image } from "react-native-expo-image-cache";
+import listings from "../api/listings";
+import ContactSellerForm from "../components/ContactSellerForm";
 
-const ListingDetailsScreen = () => {
+const ListingDetailsScreen = ({ route }) => {
+	const listing = route.params;
 	return (
-		<View>
-			<Image style={styles.image} source={require("../assets/frogman.jpg")} />
-			<View style={styles.detailsContainer}>
-				<AppText style={styles.title}>G watch for sale</AppText>
-				<AppText style={styles.price}>RM 1700</AppText>
-				<View style={styles.userContainer}>
-					<ListItem
-						image={require("../assets/bg.jpg")}
-						title="Aliff Aiman"
-						subTitle="5 listing"
-					/>
+		<KeyboardAvoidingView
+			behavior="position"
+			keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
+		>
+			<View>
+				<Image
+					style={styles.image}
+					uri={listing.images[0].url}
+					preview={{ uri: listing.images[0].thumbnailUrl }}
+					tint="light"
+				/>
+				<View style={styles.detailsContainer}>
+					<AppText style={styles.title}>{listing.title}</AppText>
+					<AppText style={styles.price}>RM {listing.price}</AppText>
+					<AppText style={styles.description}>{listing.description}</AppText>
+					<View style={styles.userContainer}>
+						<ListItem
+							image={require("../assets/bg.jpg")}
+							title="Aliff Aiman"
+							subTitle="5 listing"
+						/>
+					</View>
+					<ContactSellerForm listing={listing} />
 				</View>
 			</View>
-		</View>
+		</KeyboardAvoidingView>
 	);
 };
 
