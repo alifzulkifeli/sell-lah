@@ -30,9 +30,9 @@ const ListingScreen = ({ navigation }) => {
 						<AppButton title="Retry" onPress={loadListings} />
 					</>
 				)}
-				<FlatList
+				{/* <FlatList
 					data={listings}
-					keyExtractor={(listing) => listing.id.toString()}
+					// keyExtractor={(listing) => listing ? listing.id.toString() : null}
 					renderItem={({ item }) => (
 						<Card
 							title={item.title}
@@ -42,7 +42,7 @@ const ListingScreen = ({ navigation }) => {
 							thumbnailUrl={item.images[0].thumbnailUrl}
 						/>
 					)}
-				/>
+				/> */}
 			</Screen>
 		</>
 	);
